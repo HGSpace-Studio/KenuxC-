@@ -1,0 +1,104 @@
+import kenux.graphics;
+import kenux.desktop;
+
+class Button {
+    private string text;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    
+    public:
+        Button(string text, int x, int y, int width, int height) {
+            this.text = text;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+        
+        void draw() {
+            rgba_color_t color = {100, 150, 200, 255};
+            graphics_draw_rounded_rect({x, y, width, height}, 5, color, 1);
+            
+            rgba_color_t text_color = {255, 255, 255, 255};
+            graphics_draw_text_shadow(text, x + width/2 - 20, y + height/2 - 10, 
+                                      text_color, 2, {0, 0, 0, 128});
+        }
+        
+        bool is_clicked(int mx, int my) {
+            return (mx >= x && mx <= x + width && my >= y && my <= y + height);
+        }
+}
+
+class Window {
+    private string title;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    private Button[] buttons;
+    
+    public:
+        Window(string title, int x, int y, int width, int height) {
+            this.title = title;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+        
+        void add_button(Button button) {
+            buttons.push(button);
+        }
+        
+        void draw() {
+            rgba_color_t bg_color = {240, 240, 240, 255};
+            graphics_fill_gradient({x, y, width, height}, NULL);
+            
+            rgba_color_t border_color = {100, 100, 100, 255};
+            graphics_draw_rounded_rect({x, y, width, height}, 10, border_color, 0);
+            
+            rgba_color_t title_color = {50, 50, 50, 255};
+            graphics_draw_text(title, x + 10, y + 10, title_color);
+            
+            for (int i = 0; i < buttons.length; i++) {
+                buttons[i].draw();
+            }
+        }
+        
+        void handle_click(int mx, int my) {
+            for (int i = 0; i < buttons.length; i++) {
+                if (buttons[i].is_clicked(mx, my)) {
+                    print("Button clicked: " + buttons[i].text);
+                }
+            }
+        }
+}
+
+void main() {
+    desktop_init();
+    graphics_extended_init();
+    
+    Window window = new Window("KenC# GUI Demo", 100, 100, 400, 300);
+    
+    Button button1 = new Button("Click Me", 50, 50, 100, 40);
+    Button button2 = new Button("Hello", 200, 50, 100, 40);
+    Button button3 = new Button("Exit", 125, 120, 100, 40);
+    
+    window.add_button(button1);
+    window.add_button(button2);
+    window.add_button(button3);
+    
+    print("GUI Application Started");
+    print("Click buttons to interact");
+    
+    while (true) {
+        window.draw();
+        
+        mouse_state_t* mouse = mouse_get_state();
+        if (mouse->buttons & 1) {
+            window.handle_click(mouse->x, mouse->y);
+        }
+    }
+}

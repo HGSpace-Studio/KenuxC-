@@ -1,0 +1,44 @@
+import std.io;
+import std.math;
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+int divide(int a, int b) {
+    if (b == 0) {
+        print("Error: Division by zero");
+        return 0;
+    }
+    return a / b;
+}
+
+void main() {
+    int x = 10;
+    int y = 5;
+    
+    print("Simple Calculator");
+    print("==================");
+    print("x = " + x);
+    print("y = " + y);
+    print("");
+    
+    print("x + y = " + add(x, y));
+    print("x - y = " + subtract(x, y));
+    print("x * y = " + multiply(x, y));
+    print("x / y = " + divide(x, y));
+    
+    print("");
+    print("Advanced Operations:");
+    print("x ^ 2 = " + pow(x, 2));
+    print("sqrt(y) = " + sqrt(y));
+    print("abs(-10) = " + abs(-10));
+}

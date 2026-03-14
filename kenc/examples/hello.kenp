@@ -1,0 +1,6 @@
+import std.io;
+
+void main() {
+    print("Hello, KenuxOS!");
+    print("Welcome to KenC# Programming Language");
+}
